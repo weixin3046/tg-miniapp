@@ -1,31 +1,42 @@
 "use client";
-import { useState } from "react";
 
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
+import Image from "next/image";
 import DialogPage from "../Dialog/Dialog";
 
-export type SelectProps = {
+export type NetworkProps = {
   id: number;
   name: string;
+  icon: string;
 };
 
-export default function SelectPage({ options }: { options: SelectProps[] }) {
-  const [selected, setSelected] = useState(options[1]);
+export default function NetWorlkSelect({
+  options,
+}: {
+  options: NetworkProps[];
+}) {
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(options[0]);
+  const onOpen = () => {
+    setOpen(true);
+  };
   const onClose = () => {
     setOpen(false);
   };
-
   return (
-    <div>
-      <div className="flex w-full items-center" onClick={() => setOpen(true)}>
-        <div className="font-bold text-sm text-gray-900">{selected.name}</div>
-        <ChevronDownIcon
-          className=" h-7 w-7 pl-1 text-gray-400"
-          aria-hidden="true"
-        />
+    <>
+      <div className="flex justify-between items-center" onClick={onOpen}>
+        <div>网络</div>
+        <div className="flex items-center">
+          {selected.name}
+          <ChevronDownIcon
+            className=" h-7 w-7 pl-1 text-gray-400"
+            aria-hidden="true"
+          />
+        </div>
       </div>
-      <DialogPage open={open} onClose={onClose} title="红包类型">
+      <DialogPage open={open} onClose={onClose} title="选择网络">
         <div className="flex gap-y-2 flex-wrap">
           {options.map((item) => (
             <div
@@ -36,7 +47,10 @@ export default function SelectPage({ options }: { options: SelectProps[] }) {
                 onClose();
               }}
             >
-              <div>{item.name}</div>
+              <div className="flex gap-x-1 items-center">
+                <Image src={item.icon} alt="icon" className="w-5 h-5" />
+                <div>{item.name}</div>
+              </div>
 
               {selected === item && (
                 <div className="border border-slate-900 rounded-full">
@@ -47,6 +61,6 @@ export default function SelectPage({ options }: { options: SelectProps[] }) {
           ))}
         </div>
       </DialogPage>
-    </div>
+    </>
   );
 }
